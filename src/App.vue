@@ -54,8 +54,13 @@
           this.isSpinComplete = ops.isSpinComplete;
           this.logoSelected = ops.logoSelected;
       },
-      clgt: function(){
+      clgt(logoSelected){
           console.log('Trigged');
+          this.isSpinComplete = true;
+          this.logoSelected = logoSelected;
+          setTimeout(() => {
+            this.isSpinComplete = false;
+          },3000);
       }
     },
     watch: {
