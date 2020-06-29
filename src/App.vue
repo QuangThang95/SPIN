@@ -3,7 +3,7 @@
     <div class="row justify-content-md-center align-items-center mt-5">
       <div class="col-sm-12 col-md-8">
         <h2 style="text-align:center"></h2>
-        <b-card-group deck class="mb-3">
+        <b-card-group deck>
       <b-card border-variant="light" header="Vòng Quay May Mắn" class="text-center">
       </b-card>
     </b-card-group>
@@ -12,7 +12,6 @@
           <button :disabled="!isReset" v-on:click="spin()"  class="btn btn-primary btn-lg ">Spin</button>
           <!-- <button v-on:click="reset()" class="btn btn-warning btn-lg float-right">Reset</button> -->
         </div>
-        <br>
         <app-wheel ref="wheel"></app-wheel>
       <b-modal class="test-modal" ref="my-modal"  @hidden="reset" hide-footer :title="`Kết Quả Của Lượt Quay <${objectData&&objectData.text}>`">
       <div class="d-block text-center">
