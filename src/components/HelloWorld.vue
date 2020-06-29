@@ -1,58 +1,213 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div id="app">
+  <div>Prize number: {{ prizeNumber }}</div>
+
+   <div class="wheel-wrapper">
+    <div
+      class="wheel-pointer"
+      @click="onClickRotate"
+    >
+      Start
+    </div>
+    <div
+      class="wheel-bg"
+      :class="{freeze: freeze}"
+      :style="`transform: rotate(${wheelDeg}deg)`"
+    >
+      <div class="prize-list">
+        <div
+          class="prize-item-wrapper"
+          v-for="(item,index) in prizeList"
+          :key="index"
+        >
+          <div
+            class="prize-item"
+            :style="`transform: rotate(${(360/ prizeList.length) * index}deg)`"
+          >
+            <div class="prize-name">
+              {{ item.name }}
+            </div>
+            <div class="prize-icon">
+              <img :src="item.icon">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data() {
+    return {
+      freeze: false,
+      rolling: false,
+      wheelDeg: 0,
+      prizeNumber: 8,
+      prizeListOrigin: [
+        {
+          icon: "https://picsum.photos/40?random=1",
+          name: "Thoát nạn"
+        },
+        {
+          icon: "https://picsum.photos/40?random=6",
+          name: "Uống 100%, thêm 1 lượt quay"
+        },
+        {
+          icon: "https://picsum.photos/40?random=2",
+          name: "Uống 50%"
+        },
+        {
+          icon: "https://picsum.photos/40?random=3",
+          name: "Tất cả uống 100%"
+        },
+        {
+          icon: "https://picsum.photos/40?random=6",
+          name: "Gắp mồi đút cho người đối diện"
+        },
+        {
+          icon: "https://picsum.photos/40?random=4",
+          name: "Uống 100% với người chỉ định "
+        },
+        {
+          icon: "https://picsum.photos/40?random=5",
+          name: "Tất cả uống 50%"
+        },
+        {
+          icon: "https://picsum.photos/40?random=6",
+          name: "Uống 100% với 2 người kế bên * Uống 200% (Không uống hát 1 bài)"
+        }
+      ]
+    };
+  },
+  computed: {
+    prizeList() {
+      return this.prizeListOrigin.slice(0, this.prizeNumber);
+    }
+  },
+  methods: {
+    onClickRotate() {
+      if (this.rolling) {
+        return;
+      }
+      const result = Math.floor(Math.random() * this.prizeList.length);
+      this.roll(result);
+    },
+    roll(result) {
+      this.rolling = true;
+      const { wheelDeg, prizeList } = this;
+      this.wheelDeg =
+        wheelDeg -
+        wheelDeg % 360 +
+        6 * 360 +
+        (360 - 360 / prizeList.length * result);
+      setTimeout(() => {
+        this.rolling = false;
+        alert("Result：" + prizeList[result].name);
+      }, 4500);
+    }
+  },
+  watch: {
+    prizeNumber() {
+      this.freeze = true;
+      this.wheelDeg = 0;
+
+      setTimeout(() => {
+        this.freeze = false;
+      }, 0);
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
+<style scoped lang="scss">
+html {
+  background: #42b983;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.wheel-wrapper {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.wheel-pointer {
+  width: 60px;
+  height: 60px;
+  border-radius: 1000px;
+  background: yellow;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  line-height: 60px;
+  z-index: 10;
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -32px;
+    left: 50%;
+    border-width: 0 8px 40px;
+    border-style: solid;
+    border-color: transparent transparent yellow;
+    transform: translateX(-50%);
+  }
 }
-a {
-  color: #42b983;
+.wheel-bg {
+  width: 100%;
+  height: 100%;
+  border-radius: 1000px;
+  overflow: hidden;
+  transition: transform 4s ease-in-out;
+  background: #7eef97;
+
+  &.freeze {
+    transition: none;
+    background: red;
+  }
 }
+
+.prize-list {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-align: center;
+}
+
+.prize-item-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+}
+
+.prize-item {
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom;
+
+  .prize-name {
+padding: 16px 0px;
+    font-size: 8px;
+    flex-wrap: nowrap;
+    max-width: 120px;
+    color: blue;
+  }
+
+  .prize-icon {
+  }
+}
+
 </style>
