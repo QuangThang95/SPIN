@@ -12,7 +12,7 @@
 
     </b-row>
     <b-row class="my-1" >
-      <label for="range-2">Set Speed ( <code> {{ spin }}</code> rad/s)</label>
+      <label for="range-2">Set Speed ( <code> {{ spin }}</code> rad)</label>
     <b-form-input id="range-2" v-model="spin" type="range" min="0" max="100" step="1"></b-form-input>
     </b-row>
     <div class="row" >
@@ -31,7 +31,7 @@
         clubs: jsonData,
         wheelSpinning: false,
         duration:5,
-        spin:30
+        spin:30,
       }
     },
     watch:{
@@ -43,21 +43,26 @@
 
     },
     mounted(){
-      console.log('Loading data...');
       this.theWheel = new Winwheel({
         'outerRadius': 212,        // Set outer radius so wheel fits inside the background.
-        'innerRadius': 75,         // Make wheel hollow so segments don't go all way to center.
-        'textFontSize': 22,         // Set default font size for the segments.
+        'innerRadius': 82,         // Make wheel hollow so segments don't go all way to center.
+        'textFontSize': 24,         // Set default font size for the segments.
         'textOrientation': 'vertical', // Make text vertial so goes down from the outside of wheel.
         'textAlignment': 'outer',    // Align text to outside of wheel.
         'numSegments': this.clubs.length,         // Specify number of segments.
-        'segments': this.clubs,            // Define segments including colour and text.
+        'segments': this.clubs, 
+        'pins' :                // Turn pins on.
+                {
+                    'number'     : 20,
+                    'fillStyle'  : 'cu',
+                    'outerRadius': 3,
+                },           // Define segments including colour and text.
         'animation':           // Specify the animation to use.
           {
             'type': 'spinToStop',
             'duration': this.duration,     // Duration in seconds.
             'spins': this.spin,     // Default number of complete spins.
-            'callbackFinished': this.alertPrize
+            'callbackFinished': this.alertPrize,
           }
       });
     },
