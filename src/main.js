@@ -8,9 +8,13 @@ import App from './App'
 // global.Tether = tether;
 // require('bootstrap/dist/js/bootstrap.min');
 import {TweenMax} from "gsap";
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 global.TweenMax = TweenMax;
 require('bootstrap/scss/bootstrap.scss');
+import { BootstrapVue } from 'bootstrap-vue'
 
+// Install BootstrapVue
+Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

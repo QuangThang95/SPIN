@@ -1,6 +1,6 @@
 <template>
   <div class="logo-center d-flex align-items-center justify-content-center">
-    <img class="img-fluid" :src="logoURL"/>
+     <div >{{ logoURL }}</div>
   </div>
 </template>
 <script>
@@ -8,7 +8,7 @@
 export default {
   props: ['logoURL'],
   mounted(){
-    let animation = TweenMax.from(".img-fluid", 2, {scale: .05,rotationY:'+=360'});
+    let animation = TweenMax.from(".img-fluid", 6, {scale: .05,rotationY:'+=360'});
   }
 }
 </script>
