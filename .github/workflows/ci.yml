@@ -49,11 +49,12 @@ jobs:
 
       - name: Install dependencies 👨🏻‍💻
         run: yarn
-      - name: Install run 👨🏻‍💻
-        run: yarn server
-
+      
       - name: Run linter 👀
         run: yarn lint
 
       - name: Run tests 🧪
         run: yarn test
+        
+      - name: Install run 👨🏻‍💻
+        run: yarn serve
